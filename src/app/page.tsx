@@ -96,8 +96,8 @@ const sampleAds: Advertisement[] = [
   },
   {
     id: '5',
-    title: 'שותפות לפרויקט נדל"ן באזור השרון',
-    description: 'יזם מנוסה מחפש שותף לפרויקט מגורים באזור השרון. השקעה של 5 מיליון ₪, רווח צפוי של 40%. דרוש ניסיון בפיתוח נדל"ן.',
+    title: 'שותפות לפרויקט נדל&quot;ן באזור השרון',
+    description: 'יזם מנוסה מחפש שותף לפרויקט מגורים באזור השרון. השקעה של 5 מיליון ₪, רווח צפוי של 40%. דרוש ניסיון בפיתוח נדל&quot;ן.',
     category: 'entrepreneur',
     subcategory: 'נדלן ופיתוח',
     location: 'השרון',
@@ -496,7 +496,7 @@ export default function ContractorsPlatform() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            הפלטפורמה המובילה לעולם הבנייה והנדל"ן
+            הפלטפורמה המובילה לעולם הבנייה והנדל&quot;ן
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             מצא קבלנים מנוסים, עובדים מקצועיים ופרויקטים מרתקים. הכל במקום אחד, בטוח ומאומת.
