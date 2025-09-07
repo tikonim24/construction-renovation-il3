@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { Search, Plus, MapPin, Clock, Phone, Mail, Filter, Star, User, Building, Hammer, Home } from 'lucide-react';
 
 // Types
 interface Advertisement {
@@ -80,23 +79,97 @@ const sampleAds: Advertisement[] = [
   }
 ];
 
+// Icons as simple SVG components (to avoid lucide-react dependency issues)
+const SearchIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="8"></circle>
+    <path d="m21 21-4.35-4.35"></path>
+  </svg>
+);
+
+const PlusIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+  </svg>
+);
+
+const MapPinIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+    <circle cx="12" cy="10" r="3"></circle>
+  </svg>
+);
+
+const ClockIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10"></circle>
+    <polyline points="12,6 12,12 16,14"></polyline>
+  </svg>
+);
+
+const PhoneIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+  </svg>
+);
+
+const MailIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+    <polyline points="22,6 12,13 2,6"></polyline>
+  </svg>
+);
+
+const StarIcon = () => (
+  <svg className="w-4 h-4" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24">
+    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+  </svg>
+);
+
+const UserIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+    <circle cx="12" cy="7" r="4"></circle>
+  </svg>
+);
+
+const BuildingIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18H6zM6 12H4a2 2 0 0 0-2 2v8h4v-8zM18 12h2a2 2 0 0 1 2 2v8h-4v-8z"></path>
+  </svg>
+);
+
+const HammerIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+  </svg>
+);
+
+const HomeIcon = () => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+    <polyline points="9,22 9,12 15,12 15,22"></polyline>
+  </svg>
+);
+
 // Category configurations
 const categoryConfig = {
   contractor: {
     label: 'קבלנים',
-    icon: Hammer,
+    icon: HammerIcon,
     color: 'bg-blue-500',
     subcategories: ['בנייה וקבלנות', 'שיפוצים', 'חשמל', 'אינסטלציה', 'גינון', 'צביעה', 'ריצוף וחיפוי']
   },
   entrepreneur: {
     label: 'יזמים',
-    icon: Building,
+    icon: BuildingIcon,
     color: 'bg-green-500',
     subcategories: ['נדלן ופיתוח', 'השקעות', 'שותפויות', 'פרויקטים חדשים']
   },
   client: {
     label: 'לקוחות',
-    icon: User,
+    icon: UserIcon,
     color: 'bg-purple-500',
     subcategories: ['בנייה וקבלנות', 'שיפוצים', 'תכנון ועיצוב', 'פרויקטים מיוחדים']
   }
@@ -181,7 +254,7 @@ export default function Home() {
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className={`${config.color} text-white p-2 rounded-lg`}>
-              <IconComponent size={20} />
+              <IconComponent />
             </div>
             <div>
               <span className="text-xs text-gray-500 font-medium">{config.label}</span>
@@ -190,7 +263,7 @@ export default function Home() {
           </div>
           {ad.rating && (
             <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg">
-              <Star className="text-yellow-400 fill-current" size={16} />
+              <StarIcon />
               <span className="text-sm font-semibold text-yellow-700">{ad.rating}</span>
             </div>
           )}
@@ -200,14 +273,14 @@ export default function Home() {
           {ad.title}
         </h3>
         
-        <p className="text-gray-600 mb-4 line-clamp-3">
+        <p className="text-gray-600 mb-4">
           {ad.description}
         </p>
 
         <div className="space-y-2 mb-4">
           {ad.location && (
             <div className="flex items-center gap-2 text-gray-600">
-              <MapPin size={16} className="text-gray-400" />
+              <MapPinIcon />
               <span className="text-sm">{ad.location}</span>
             </div>
           )}
@@ -220,7 +293,7 @@ export default function Home() {
           
           {ad.deadline && (
             <div className="flex items-center gap-2 text-gray-600">
-              <Clock size={16} className="text-gray-400" />
+              <ClockIcon />
               <span className="text-sm">זמן ביצוע: {ad.deadline}</span>
             </div>
           )}
@@ -237,13 +310,13 @@ export default function Home() {
               {ad.phone && (
                 <a href={`tel:${ad.phone}`} 
                    className="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-lg transition-colors">
-                  <Phone size={16} />
+                  <PhoneIcon />
                 </a>
               )}
               {ad.email && (
                 <a href={`mailto:${ad.email}`}
                    className="bg-gray-50 hover:bg-gray-100 text-gray-600 p-2 rounded-lg transition-colors">
-                  <Mail size={16} />
+                  <MailIcon />
                 </a>
               )}
             </div>
@@ -261,7 +334,7 @@ export default function Home() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-2 rounded-xl">
-                <Home size={24} />
+                <HomeIcon />
               </div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 לוח מודעות לקבלנים ויזמים
@@ -272,7 +345,7 @@ export default function Home() {
               onClick={() => setShowAddForm(true)}
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-lg hover:shadow-xl"
             >
-              <Plus size={20} />
+              <PlusIcon />
               פרסם מודעה
             </button>
           </div>
@@ -285,7 +358,9 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">
-              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <SearchIcon />
+              </div>
               <input
                 type="text"
                 placeholder="חיפוש מודעות..."
