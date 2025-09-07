@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 // Types
 interface Advertisement {
@@ -96,8 +96,8 @@ const sampleAds: Advertisement[] = [
   },
   {
     id: '5',
-    title: 'שותפות לפרויקט נדל"ן באזור השרון',
-    description: 'יזם מנוסה מחפש שותף לפרויקט מגורים באזור השרון. השקעה של 5 מיליון ₪, רווח צפוי של 40%. דרוש ניסיון בפיתוח נדל"ן.',
+    title: 'שותפות לפרויקט נדל&quot;ן באזור השרון',
+    description: 'יזם מנוסה מחפש שותף לפרויקט מגורים באזור השרון. השקעה של 5 מיליון ₪, רווח צפוי של 40%. דרוש ניסיון בפיתוח נדל&quot;ן.',
     category: 'entrepreneur',
     subcategory: 'נדלן ופיתוח',
     location: 'השרון',
@@ -222,13 +222,15 @@ export default function ContractorsPlatform() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>('all');
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-  const [user, setUser] = useState<User | null>(null);
-  const [formData, setFormData] = useState<Partial<Advertisement>>({
-    category: 'client'
-  });
+  const [user] = useState<User | null>(null);
+
+  // Future functionality (commented out to avoid build errors)
+  // const [showAddForm, setShowAddForm] = useState(false);
+  // const [showAuthModal, setShowAuthModal] = useState(false);
+  // const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  // const [formData, setFormData] = useState<Partial<Advertisement>>({
+  //   category: 'client'
+  // });
 
   // Filter ads based on search and category
   const filteredAds = ads.filter(ad => {
@@ -255,36 +257,37 @@ export default function ContractorsPlatform() {
     }).format(date);
   };
 
-  const handleAddAd = () => {
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
-    
-    if (!formData.title || !formData.description || !formData.contactName) return;
-
-    const newAd: Advertisement = {
-      id: Date.now().toString(),
-      title: formData.title,
-      description: formData.description,
-      category: formData.category as Advertisement['category'],
-      subcategory: formData.subcategory || '',
-      location: formData.location || '',
-      contactName: formData.contactName,
-      phone: formData.phone || '',
-      email: formData.email || '',
-      budget: formData.budget,
-      deadline: formData.deadline,
-      urgent: formData.urgent,
-      verified: user.verified,
-      userId: user.id,
-      createdAt: new Date()
-    };
-
-    setAds(prev => [newAd, ...prev]);
-    setFormData({ category: 'client' });
-    setShowAddForm(false);
-  };
+  // Future functionality for adding ads (commented out to avoid build errors)
+  // const handleAddAd = () => {
+  //   if (!user) {
+  //     setShowAuthModal(true);
+  //     return;
+  //   }
+  //   
+  //   if (!formData.title || !formData.description || !formData.contactName) return;
+  //
+  //   const newAd: Advertisement = {
+  //     id: Date.now().toString(),
+  //     title: formData.title,
+  //     description: formData.description,
+  //     category: formData.category as Advertisement['category'],
+  //     subcategory: formData.subcategory || '',
+  //     location: formData.location || '',
+  //     contactName: formData.contactName,
+  //     phone: formData.phone || '',
+  //     email: formData.email || '',
+  //     budget: formData.budget,
+  //     deadline: formData.deadline,
+  //     urgent: formData.urgent,
+  //     verified: user.verified,
+  //     userId: user.id,
+  //     createdAt: new Date()
+  //   };
+  //
+  //   setAds(prev => [newAd, ...prev]);
+  //   setFormData({ category: 'client' });
+  //   setShowAddForm(false);
+  // };
 
   // Enhanced Ad Card Component
   const AdCard = ({ ad }: { ad: Advertisement }) => {
@@ -421,6 +424,22 @@ export default function ContractorsPlatform() {
     </div>
   );
 
+  // Placeholder function for future authentication modal
+  const handleAuthAction = () => {
+    // Future implementation
+    console.log('Authentication modal will be implemented');
+  };
+
+  // Placeholder function for future add ad functionality
+  const handleAddAdAction = () => {
+    if (!user) {
+      handleAuthAction();
+      return;
+    }
+    // Future implementation
+    console.log('Add ad functionality will be implemented');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30">
       {/* Enhanced Header */}
@@ -452,7 +471,7 @@ export default function ContractorsPlatform() {
                 </div>
               ) : (
                 <button
-                  onClick={() => setShowAuthModal(true)}
+                  onClick={handleAuthAction}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-lg hover:shadow-xl"
                 >
                   <UserIcon />
@@ -461,7 +480,7 @@ export default function ContractorsPlatform() {
               )}
               
               <button
-                onClick={() => user ? setShowAddForm(true) : setShowAuthModal(true)}
+                onClick={handleAddAdAction}
                 className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white px-6 py-2 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-lg hover:shadow-xl"
               >
                 <PlusIcon />
@@ -476,7 +495,7 @@ export default function ContractorsPlatform() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            הפלטפורמה המובילה לעולם הבנייה והנדל"ן
+            הפלטפורמה המובילה לעולם הבנייה והנדל&quot;ן
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             מצא קבלנים מנוסים, עובדים מקצועיים ופרויקטים מרתקים. הכל במקום אחד, בטוח ומאומת.
@@ -572,7 +591,7 @@ export default function ContractorsPlatform() {
         )}
       </main>
 
-      {/* Modals will be added here in next iteration */}
+      {/* Future: Modals will be added here */}
       
     </div>
   );
